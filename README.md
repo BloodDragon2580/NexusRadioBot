@@ -1,13 +1,15 @@
 # 🎵 NexusRadioBot - Discord Radio Bot  
 
 Ein einfacher Discord-Radio-Bot, der automatisch **BigFM** oder einen anderen gewünschten Stream in einen Sprachkanal spielt.  
-Mit Unterstützung für **Slash-Commands** und **automatischen Neustart** via NSSM.  
+Mit Unterstützung für **Slash-Commands**, **automatischen Neustart** via NSSM und **automatischen Stream-Reload**.  
 
 ---
 
 ## 📌 **Features**  
 ✅ Spielt automatisch einen **Radio-Stream** in einen bestimmten Voice-Channel  
-✅ **Slash-Commands** für einfache Steuerung (`/radioon`, `/radiooff`)  
+✅ **Slash-Commands** für einfache Steuerung (`/radioon`, `/radiooff`, `/radioreload`)  
+✅ **Automatischer Stream-Neustart** alle 15 Minuten, um Verbindungsprobleme zu minimieren  
+✅ **Bot-Status zeigt "Hört BigFM"**, solange der Stream läuft  
 ✅ **Automatischer Neustart** des Bots mit **NSSM** (Windows-Dienst)  
 ✅ **FFmpeg** für stabile Audio-Wiedergabe  
 
@@ -168,7 +170,19 @@ C:\nssm\win64\nssm.exe remove NexusRadioBot confirm
 
 ---
 
-## 🆘 **6. Häufige Fehler & Lösungen**  
+## 🔄 **6. Neue Features & Änderungen**  
+### ✅ **Neu hinzugefügt:**  
+- **Slash-Command `/radioreload`**: Ermöglicht das manuelle Neuladen des Streams, falls es Probleme gibt.  
+- **Bot-Aktivität**: Der Bot zeigt nun als Status **"Hört BigFM"**, wenn der Stream läuft.  
+
+### 🔄 **Verbesserungen:**  
+- **Automatische Stream-Neustart-Funktion** alle 15 Minuten, um Unterbrechungen zu vermeiden.  
+- **Besseres Management des Streams**, ohne dass der Bot den Sprachkanal verlassen muss.  
+- **Der Bot-Status wird zurückgesetzt**, wenn der Stream gestoppt wird.  
+
+---
+
+## 🆘 **7. Häufige Fehler & Lösungen**  
 
 ### **1️⃣ Bot joint nicht in den Voice-Channel**  
 ✅ Stelle sicher, dass der Bot **Berechtigungen** hat (`Connect`, `Speak`).  
@@ -188,7 +202,7 @@ C:\nssm\win64\nssm.exe remove NexusRadioBot confirm
 
 ---
 
-## 🔗 **7. Links & Ressourcen**  
+## 🔗 **8. Links & Ressourcen**  
 
 - **GitHub Repository**: [NexusRadioBot](https://github.com/BloodDragon2580/NexusRadioBot)  
 - **Python Download**: [python.org](https://www.python.org/downloads/)  

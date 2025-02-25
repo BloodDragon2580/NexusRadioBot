@@ -39,7 +39,7 @@ async def connect_and_stream():
         # Prüfen, ob der Bot bereits im Sprachkanal ist
         vc = nextcord.utils.get(client.voice_clients, guild=guild)
         
-        if not vc:  # Falls nicht verbunden, dann verbinden
+        if not vc or not vc.is_connected():  # Falls nicht verbunden, dann verbinden
             vc = await channel.connect()
         
         # Falls bereits ein Stream läuft, diesen stoppen
@@ -57,8 +57,21 @@ async def connect_and_stream():
     except Exception as e:
         print(f"Fehler beim Starten des Streams: {e}")
 
+# Hintergrundaufgabe für das regelmäßige Überprüfen des Streams
+@tasks.loop(minutes=5)
+async def check_stream():
+    """Prüft regelmäßig, ob der Bot noch verbunden ist, und startet den Stream neu, falls nötig."""
+    guild = client.get_guild(GUILD_ID)
+    if not guild:
+        return
+
+    vc = nextcord.utils.get(client.voice_clients, guild=guild)
+    if not vc or not vc.is_connected():
+        print("Bot war nicht verbunden. Versuche, neu zu verbinden...")
+        await connect_and_stream()
+
 # Hintergrundaufgabe für das regelmäßige Neustarten des Streams
-@tasks.loop(minutes=15)
+@tasks.loop(minutes=30)
 async def restart_stream():
     """Startet den Stream alle 15 Minuten neu, ohne den Bot aus dem Kanal zu werfen."""
     print("Neustart des Streams...")
@@ -77,6 +90,7 @@ async def on_ready():
     await connect_and_stream()
 
     # Start der Hintergrundaufgabe zum regelmäßigen Neustarten des Streams
+    check_stream.start()
     restart_stream.start()
 
 # Slash-Command: Startet den Radio-Stream manuell

@@ -48,7 +48,7 @@ async def connect_and_stream():
 
         # Neuen Stream starten
         vc.play(nextcord.FFmpegPCMAudio(RADIO_STREAM_URL, executable=FFMPEG_PATH, 
-               options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"))
+                options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -buffer_size 64K"))
         
         # Setzt den Status des Bots auf "Hört BigFM"
         await client.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.listening, name="BigFM"))
@@ -68,6 +68,9 @@ async def check_stream():
     vc = nextcord.utils.get(client.voice_clients, guild=guild)
     if not vc or not vc.is_connected():
         print("Bot war nicht verbunden. Versuche, neu zu verbinden...")
+        await connect_and_stream()
+    elif not vc.is_playing():  # Falls der Bot verbunden ist, aber nichts spielt
+        print("Stream war gestoppt, starte neu...")
         await connect_and_stream()
 
 # Hintergrundaufgabe für das regelmäßige Neustarten des Streams
